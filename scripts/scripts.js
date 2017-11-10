@@ -5,3 +5,8 @@ var cssProperties = anime({
   borderRadius: 40,
   easing: 'easeInOutQuad'
 });
+var unitlessValue = anime({
+  targets: '#unitlessValue .el',
+  translateX: 250,
+  rotate: 540
+});
