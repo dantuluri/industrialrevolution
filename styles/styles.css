@@ -1,4 +1,18 @@
 @charset "UTF-8";
+.fonty
+{
+    font-family: 'Roboto', sans-serif; 
+font-weight:600;
+}
+.deepak{
+     font-size: 1.75em;
+}
+.patdown{
+    padding-top: 20px;
+}
+.evensmaller{
+    font-size: 0.5em;
+}
 .topback{
     background-color: #212121;
 }
@@ -14,6 +28,9 @@
 .padon{
     margin-top: 27px;
 }
+.padont{
+    padding-top: 10px;
+}
 .paddy
 {
     margin-bottom: 0px;
@@ -27,12 +44,6 @@
     padding-bottom: 0em;
 }
 
-#subline {
-    font-size: 2em;
-    padding-top: 0em;
-    letter-spacing: 0.01em;
-    font-weight: 300;
-}
 
 #orange {
     color: #FFB74D;
