@@ -1,38 +1,48 @@
 @charset "UTF-8";
-.fonty
-{
-    font-family: 'Roboto', sans-serif; 
-font-weight:600;
+
+.canvy {
+    height:1000px;
+    width:1000pc;
 }
-.deepak{
-     font-size: 1.75em;
+
+.fonty {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
 }
-.patdown{
+
+.deepak {
+    font-size: 1.75em;
+}
+
+.patdown {
     padding-top: 20px;
 }
-.evensmaller{
+
+.evensmaller {
     font-size: 0.5em;
 }
-.topback{
+
+.topback {
     background-color: #212121;
 }
-.whitetext{
+
+.whitetext {
     color: white;
 }
 
-.black
-{
+.black {
     background-color: #000000;
-
 }
-.padon{
+
+.padon {
     margin-top: 27px;
 }
-.padont{
+
+.padont {
     padding-top: 10px;
 }
-.paddy
-{
+
+.paddy {
     margin-bottom: 0px;
     margin-left: 0px;
     margin-right: 0px;
@@ -44,7 +54,6 @@ font-weight:600;
     padding-bottom: 0em;
 }
 
-
 #orange {
     color: #FFB74D;
 }
@@ -52,7 +61,6 @@ font-weight:600;
 #red {
     color: #F48FB1;
 }
-
 
 #blue {
     color: #81D4FA;
