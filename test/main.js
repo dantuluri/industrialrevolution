@@ -1,260 +1,175 @@
-// anime({
-//   targets: 'div.box.red',
-//   translateY: [
-//     { value: 200, duration: 500 },
-//     { value: 0, duration: 800 }
-//   ],
-//   rotate:{
-//     value: '1turn',
-//     easing: 'easeInOutSine'
-//   }
-// });
+// Create an array to store our particles
+var particles = [];
 
-// anime({
-//   targets: 'div.box.blue',
-//   translateY: [
-//     { value: 200, duration: 500, delay: 1000},
-//     { value: 0, duration: 800 }
-//   ],
-//   rotate:{
-//     value: '1turn',
-//     easing: 'easeInOutSine',
-//     delay: 1000
-//   }
-// });
+// The amount of particles to render
+var particleCount = 30;
 
-// anime({
-//   targets: 'div.box.green',
-//   translateY: [
-//     { value: 200, duration: 500, delay: 2000},
-//     { value: 0, duration: 800 }
-//   ],
-//   rotate:{
-//     value: '1turn',
-//     easing: 'easeInOutSine',
-//     delay: 2000
-//   }
-// });
+// The maximum velocity in each direction
+var maxVelocity = 2;
 
-// anime({
-//   targets: 'div.box.yellow',
-//   translateY: [
-//     { value: 200, duration: 500, delay: 3000},
-//     { value: 0, duration: 800 }
-//   ],
-//   rotate:{
-//     value: '1turn',
-//     easing: 'easeInOutSine',
-//     delay: 3000
-//   }
-// });
-var pathEls = document.querySelectorAll('path');
-for (var i = 0; i < pathEls.length; i++) {
-  var pathEl = pathEls[i];
-  var offset = anime.setDashoffset(pathEl);
-  pathEl.setAttribute('stroke-dashoffset', offset);
-  anime({
-    targets: pathEl,
-    strokeDashoffset: [offset, 0],
-    duration: anime.random(1000, 3000),
-    delay: anime.random(0, 2000),
-    loop: true,
-    direction: 'alternate',
-    easing: 'easeInOutSine',
-    autoplay: true
-  });
-}
-var playPause = anime({
-  targets: 'div.box',
-  translateY: [
-    { value: 200, duration: 500 },
-    { value: 0, duration: 800 }
-  ],
-  rotate:{
-    value: '1turn',
-    easing: 'easeInOutSine'
-  },
-  delay: function(el, i, l){ return i * 1000},
-  autoplay:false,
-  loop:true
-});
-var unitlessValue = anime({
-  targets: '#unitlessValue .el',
-  translateX: 250,
-  rotate: 540
-});
+// The target frames per second (how often do we want to update / redraw the scene)
+var targetFPS = 33;
 
+// Set the dimensions of the canvas as variables so they can be used.
+var canvasWidth = 400;
+var canvasHeight = 400;
 
+// Create an image object (only need one instance)
+var imageObj = new Image();
 
-var timelineParameters = anime.timeline({
-  direction: 'alternate',
-  loop: true
-});
+// Once the image has been downloaded then set the image on all of the particles
+imageObj.onload = function() {
+    particles.forEach(function(particle) {
+            particle.setImage(imageObj);
+    });
+};
 
-timelineParameters
-  .add({
-    targets: '#timelineParameters .square.el',
-    translateX: [ { value: 80 }, { value: 160 }, { value: 250 } ],
-    translateY: [ { value: 30 }, { value: 60 }, { value: 60 } ],
-    duration: 3000
-  })
-  .add({
-    targets: '#timelineParameters .circle.el',
-    translateX: [ { value: 80 }, { value: 160 }, { value: 250 } ],
-    translateY: [ { value: 30 }, { value: -30 }, { value: -30 } ],
-    duration: 3000,
-    offset: 200
-  })
-  .add({
-    targets: '#timelineParameters .triangle.el',
-    translateX: [ { value: 80 }, { value: 250 } ],
-    translateY: [ { value: -60 }, { value: -30 }, { value: -30 } ],
-    duration: 3000,
-    offset: 400
-  });
+// Once the callback is arranged then set the source of the image
+imageObj.src = "http://www.blog.jonnycornwell.com/wp-content/uploads/2012/07/Smoke10.png";
 
-window.human = false;
+// A function to create a particle object.
+function Particle(context) {
 
-var canvasEl = document.querySelector('.fireworks');
-var ctx = canvasEl.getContext('2d');
-var numberOfParticules = 30;
-var pointerX = 0;
-var pointerY = 0;
-var tap = ('ontouchstart' in window || navigator.msMaxTouchPoints) ? 'touchstart' : 'mousedown';
-var colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
+    // Set the initial x and y positions
+    this.x = 0;
+    this.y = 0;
 
-function setCanvasSize() {
-  canvasEl.width = window.innerWidth * 2;
-  canvasEl.height = window.innerHeight * 2;
-  canvasEl.style.width = window.innerWidth + 'px';
-  canvasEl.style.height = window.innerHeight + 'px';
-  canvasEl.getContext('2d').scale(2, 2);
+    // Set the initial velocity
+    this.xVelocity = 0;
+    this.yVelocity = 0;
+
+    // Set the radius
+    this.radius = 5;
+
+    // Store the context which will be used to draw the particle
+    this.context = context;
+
+    // The function to draw the particle on the canvas.
+    this.draw = function() {
+        
+        // If an image is set draw it
+        if(this.image){
+            this.context.drawImage(this.image, this.x-128, this.y-128);         
+            // If the image is being rendered do not draw the circle so break out of the draw function                
+            return;
+        }
+        // Draw the circle as before, with the addition of using the position and the radius from this object.
+        this.context.beginPath();
+        this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+        this.context.fillStyle = "rgba(0, 255, 255, 1)";
+        this.context.fill();
+        this.context.closePath();
+    };
+
+    // Update the particle.
+    this.update = function() {
+        // Update the position of the particle with the addition of the velocity.
+        this.x += this.xVelocity;
+        this.y += this.yVelocity;
+
+        // Check if has crossed the right edge
+        if (this.x >= canvasWidth) {
+            this.xVelocity = -this.xVelocity;
+            this.x = canvasWidth;
+        }
+        // Check if has crossed the left edge
+        else if (this.x <= 0) {
+            this.xVelocity = -this.xVelocity;
+            this.x = 0;
+        }
+
+        // Check if has crossed the bottom edge
+        if (this.y >= canvasHeight) {
+            this.yVelocity = -this.yVelocity;
+            this.y = canvasHeight;
+        }
+        
+        // Check if has crossed the top edge
+        else if (this.y <= 0) {
+            this.yVelocity = -this.yVelocity;
+            this.y = 0;
+        }
+    };
+
+    // A function to set the position of the particle.
+    this.setPosition = function(x, y) {
+        this.x = x;
+        this.y = y;
+    };
+
+    // Function to set the velocity.
+    this.setVelocity = function(x, y) {
+        this.xVelocity = x;
+        this.yVelocity = y;
+    };
+    
+    this.setImage = function(image){
+        this.image = image;
+    }
 }
 
-function updateCoords(e) {
-  pointerX = e.clientX || e.touches[0].clientX;
-  pointerY = e.clientY || e.touches[0].clientY;
+// A function to generate a random number between 2 values
+function generateRandom(min, max){
+    return Math.random() * (max - min) + min;
 }
 
-function setParticuleDirection(p) {
-  var angle = anime.random(0, 360) * Math.PI / 180;
-  var value = anime.random(50, 180);
-  var radius = [-1, 1][anime.random(0, 1)] * value;
-  return {
-    x: p.x + radius * Math.cos(angle),
-    y: p.y + radius * Math.sin(angle)
-  }
+// The canvas context if it is defined.
+var context;
+
+// Initialise the scene and set the context if possible
+function init() {
+    var canvas = document.getElementById('myCanvas');
+    if (canvas.getContext) {
+
+        // Set the context variable so it can be re-used
+        context = canvas.getContext('2d');
+
+        // Create the particles and set their initial positions and velocities
+        for(var i=0; i < particleCount; ++i){
+            var particle = new Particle(context);
+            
+            // Set the position to be inside the canvas bounds
+            particle.setPosition(generateRandom(0, canvasWidth), generateRandom(0, canvasHeight));
+            
+            // Set the initial velocity to be either random and either negative or positive
+            particle.setVelocity(generateRandom(-maxVelocity, maxVelocity), generateRandom(-maxVelocity, maxVelocity));
+            particles.push(particle);            
+        }
+    }
+    else {
+        alert("Please use a modern browser");
+    }
 }
 
-function createParticule(x,y) {
-  var p = {};
-  p.x = x;
-  p.y = y;
-  p.color = colors[anime.random(0, colors.length - 1)];
-  p.radius = anime.random(16, 32);
-  p.endPos = setParticuleDirection(p);
-  p.draw = function() {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI, true);
-    ctx.fillStyle = p.color;
-    ctx.fill();
-  }
-  return p;
+// The function to draw the scene
+function draw() {
+    // Clear the drawing surface and fill it with a black background
+    context.fillStyle = "rgba(0, 0, 0, 0.5)";
+    context.fillRect(0, 0, 400, 400);
+
+    // Go through all of the particles and draw them.
+    particles.forEach(function(particle) {
+        particle.draw();
+    });
 }
 
-function createCircle(x,y) {
-  var p = {};
-  p.x = x;
-  p.y = y;
-  p.color = '#FFF';
-  p.radius = 0.1;
-  p.alpha = .5;
-  p.lineWidth = 6;
-  p.draw = function() {
-    ctx.globalAlpha = p.alpha;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI, true);
-    ctx.lineWidth = p.lineWidth;
-    ctx.strokeStyle = p.color;
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-  }
-  return p;
+// Update the scene
+function update() {
+    particles.forEach(function(particle) {
+        particle.update();
+    });
 }
 
-function renderParticule(anim) {
-  for (var i = 0; i < anim.animatables.length; i++) {
-    anim.animatables[i].target.draw();
-  }
+// Initialize the scene
+init();
+
+// If the context is set then we can draw the scene (if not then the browser does not support canvas)
+if (context) {
+    setInterval(function() {
+        // Update the scene befoe drawing
+        update();
+
+        // Draw the scene
+        draw();
+    }, 1000 / targetFPS);
 }
-
-function animateParticules(x, y) {
-  var circle = createCircle(x, y);
-  var particules = [];
-  for (var i = 0; i < numberOfParticules; i++) {
-    particules.push(createParticule(x, y));
-  }
-  anime.timeline().add({
-    targets: particules,
-    x: function(p) { return p.endPos.x; },
-    y: function(p) { return p.endPos.y; },
-    radius: 0.1,
-    duration: anime.random(1200, 1800),
-    easing: 'easeOutExpo',
-    update: renderParticule
-  })
-    .add({
-    targets: circle,
-    radius: anime.random(80, 160),
-    lineWidth: 0,
-    alpha: {
-      value: 0,
-      easing: 'linear',
-      duration: anime.random(600, 800),  
-    },
-    duration: anime.random(1200, 1800),
-    easing: 'easeOutExpo',
-    update: renderParticule,
-    offset: 0
-  });
-}
-
-var render = anime({
-  duration: Infinity,
-  update: function() {
-    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-  }
-});
-
-document.addEventListener(tap, function(e) {
-  window.human = true;
-  render.play();
-  updateCoords(e);
-  animateParticules(pointerX, pointerY);
-}, false);
-
-var centerX = window.innerWidth / 2;
-var centerY = window.innerHeight / 2;
-
-function autoClick() {
-  if (window.human) return;
-  animateParticules(
-    anime.random(centerX-50, centerX+50), 
-    anime.random(centerY-50, centerY+50)
-  );
-  anime({duration: 200}).finished.then(autoClick);
-}
-
-autoClick();
-setCanvasSize();
-window.addEventListener('resize', setCanvasSize, false);
-
-
-
-
-
-
-
-
-document.querySelector('#boxes .play').onclick = playPause.play;
-document.querySelector('#boxes .pause').onclick = playPause.pause;
