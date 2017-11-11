@@ -10,7 +10,10 @@
 }
 .lefpad{
     padding-left: 30px;
-    padding-right: -30px;
+}
+.rpad{
+    padding-left: 100px;
+    margin-right: -40px;
 }
 .darr{
     background-color: #212121;
