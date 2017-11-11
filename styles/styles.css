@@ -20,6 +20,12 @@
   transform: scale(0);
 }
 
+.apad{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
 
 .hleft{
     margin-left: 50px;
