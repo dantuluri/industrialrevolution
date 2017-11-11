@@ -1587,3 +1587,84 @@ svg {
 .slideOutUp {
     animation-name: slideOutUp;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#container {
+  width: 576px;
+  height: 300px;
+  margin: 30px auto;
+  background: rgb(170,0,39); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(170,0,39,1) 0%, rgba(193,13,76,1) 13%, rgba(234,85,7,1) 43%, rgba(241,116,50,1) 68%, rgba(239,182,91,1) 92%, rgba(242,210,94,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(170,0,39,1)), color-stop(13%,rgba(193,13,76,1)), color-stop(43%,rgba(234,85,7,1)), color-stop(68%,rgba(241,116,50,1)), color-stop(92%,rgba(239,182,91,1)), color-stop(100%,rgba(242,210,94,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(170,0,39,1) 0%,rgba(193,13,76,1) 13%,rgba(234,85,7,1) 43%,rgba(241,116,50,1) 68%,rgba(239,182,91,1) 92%,rgba(242,210,94,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(170,0,39,1) 0%,rgba(193,13,76,1) 13%,rgba(234,85,7,1) 43%,rgba(241,116,50,1) 68%,rgba(239,182,91,1) 92%,rgba(242,210,94,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(170,0,39,1) 0%,rgba(193,13,76,1) 13%,rgba(234,85,7,1) 43%,rgba(241,116,50,1) 68%,rgba(239,182,91,1) 92%,rgba(242,210,94,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(170,0,39,1) 0%,rgba(193,13,76,1) 13%,rgba(234,85,7,1) 43%,rgba(241,116,50,1) 68%,rgba(239,182,91,1) 92%,rgba(242,210,94,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aa0027', endColorstr='#f2d25e',GradientType=0 ); /* IE6-9 */
+  transform-style:preserve-3d;
+}
+
+svg { left: -1px; }
+
+.prop1 { 
+  transform-origin: 48% 35%;
+  }
+
+.prop2 { 
+  transform-origin: 38% 49%;
+  }
+
+.prop3-mid { 
+  transform-origin: 51% 66%;
+  }
+
+.prop4 { 
+  transform-origin: 65% 52%;
+  margin-top: -4px;
+  }
+
+.prop5 { 
+  transform-origin: 35% 50%;
+  }
+
+.landscape {
+  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/28963/landscape.png') no-repeat;
+  position: fixed;
+  z-index: 1000;
+  top: -1px;
+  left: -1px;
+  height: 307px;
+  width: 578px;
+}
+
