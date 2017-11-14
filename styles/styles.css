@@ -30,6 +30,12 @@
     margin-right: 10px;
     margin-bottom: 10px;
 }
+.bpad{
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
 
 .hleft{
     margin-left: 50px;
